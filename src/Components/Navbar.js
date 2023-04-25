@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { searchData } from "../features/userDetailsSlice";
 
 const Navbar = () => {
+  const allUsers = useSelector((state) => state.app.users);
+  const [searchInput, setSearchInput] = useState("");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(searchData(searchInput));
+  }, [dispatch, searchInput]);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -26,7 +36,7 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               <Link to="/read" className="nav-link">
-                All Post
+                All Post ({allUsers.length})
               </Link>
             </li>
           </ul>
@@ -35,6 +45,8 @@ const Navbar = () => {
             type="search"
             placeholder="Search"
             aria-label="Search"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
       </div>
